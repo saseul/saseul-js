@@ -1,0 +1,52 @@
+{
+  "name": "saseul",
+  "version": "2.7.9",
+  "description": "Javascript API Library for SASEUL blockchain",
+  "main": "index.js",
+  "keywords": [
+    "SASEUL",
+    "saseul",
+    "SASEUL Rpc API",
+    "SASEUL Library",
+    "blockchain",
+    "SDK"
+  ],
+  "author": "Artifriends, Inc. <help@artifriends.com>",
+  "contributors": [
+    "Ohn DongHun <fatihohn@gmail.com>",
+    "Lee DongGi <multidong1017@gmail.com>",
+    "Jang JinYoung <deveq@kakao.com>"
+  ],
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Artifriends-inc/saseul-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Artifriends-inc/saseul-js/issues"
+  },
+  "homepage": "https://github.com/Artifriends-inc/saseul-js#readme",
+  "dependencies": {
+    "bignumber.js": "^9.0.2",
+    "crypto-js": "^4.1.1",
+    "form-data": "^4.0.0",
+    "locutus": "^2.0.16",
+    "node-fetch": "2.6.x",
+    "tweetnacl": "^1.0.3"
+  },
+  "files": [
+    "core",
+    "model",
+    "php",
+    "rpc",
+    "smartMethod",
+    "util",
+    "code.js",
+    "config.js",
+    "index.js",
+    "LICENSE.md",
+    "package.json",
+    "README.md",
+    "type.js"
+  ]
+}
