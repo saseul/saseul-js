@@ -64384,7 +64384,7 @@ window.f_m_73617365756c = require('saseul');
 },{"saseul":575}]},{},[607]);
 
                     
-                    const saseul = window.f_m_73617365756c;
+                    const Saseul = window.f_m_73617365756c;
                     delete window.f_m_73617365756c;
-                    export default saseul;
+                    export default Saseul;
                 
