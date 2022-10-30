@@ -1,4 +1,4 @@
-# Use
+# Usage
 
 ```html
 <script src="saseul.min.js"></script>
