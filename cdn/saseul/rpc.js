@@ -121,7 +121,10 @@
             var p, b = new FormData();
 
             if (typeof h !== "string") {
-                h = 'blanc.saseul.net';
+                console.error('The host URL is required. ');
+                return new Promise(function (_r) {
+                    _r({ code: 999, msg: "The host URL is required. " });
+                });
             }
 
             if (typeof o.transaction === "object") {
