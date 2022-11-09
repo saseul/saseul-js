@@ -146,7 +146,7 @@
         },
 
         _send: function (form_data, url_path, callback) {
-            fetch('//' + url_path, {
+            fetch(f.wrapProtocol(url_path), {
                 method: "POST",
                 mode: "cors",
                 body: form_data,
@@ -166,7 +166,7 @@
             urls = this.shuffle(urls);
             urls.forEach(function (_a, _i) {
                 if (_i < _z) {
-                    fetch('//' + _a + path, option)
+                    fetch(f.wrapProtocol(_a + path), option)
                         .then(
                             (function (r) { return r.json(); }),
                             (function (r) { return { code: 999, msg: r.message }; })
@@ -196,5 +196,13 @@
                 .sort((x, y) => x.i - y.i)
                 .map(({ v }) => v)
         },
+
+        wrapProtocol: function (u) {
+            if (u.substring(0, 7) === 'http://' || u.substring(0, 8) === 'https://' || u.substring(0, 2) === '//') {
+                return u;
+            }
+
+            return '//' + u;
+        }
     };
 })();
