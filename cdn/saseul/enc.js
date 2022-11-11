@@ -80,25 +80,25 @@
                 c = JSON.parse(c);
             }
 
-            if (typeof c.m === 'undefined') {
+            if (typeof c.w === 'undefined') {
                 return {
                     cid: SASEUL.Enc.spaceId(c.writer, c.nonce),
-                    name: c.name,
-                    writer: c.writer,
-                    type: c.type,
-                    version: c.version,
-                    parameters: c.parameters,
-                    nonce: c.nonce
+                    name: c.name ?? '',
+                    writer: c.writer ?? '',
+                    type: c.type ?? '',
+                    version: c.version ?? '0',
+                    parameters: c.parameters ?? {},
+                    nonce: c.nonce ?? '',
                 }
             } else {
                 return {
                     cid: SASEUL.Enc.spaceId(c.w, c.s),
-                    name: c.n,
-                    writer: c.w,
-                    type: c.t,
-                    version: c.v,
-                    parameters: c.p,
-                    nonce: c.s,
+                    name: c.n ?? '',
+                    writer: c.w ?? '',
+                    type: c.t ?? '',
+                    version: c.v ?? '0',
+                    parameters: c.p ?? {},
+                    nonce: c.s ?? '',
                 }
             }
         },
