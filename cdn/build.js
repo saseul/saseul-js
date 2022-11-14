@@ -2,6 +2,7 @@ const annotation = `/*
 SASEUL JS
 https://github.com/saseul/saseul-js
 (c) 2016-2022 by ArtiFriends Inc. All rights reserved.
+https://github.com/saseul/saseul-js/blob/master/LICENSE.md
 */
 `;
 
