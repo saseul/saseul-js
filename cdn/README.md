@@ -1,3 +1,5 @@
+# SASEUL JS for browser v1.0.0
+
 > Github: [https://github.com/saseul/saseul-js](https://github.com/saseul/saseul-js)
 >
 > Latest Release: [[Download Link]](https://github.com/saseul/saseul-js/files/10006104/saseul.js-v1.0.0.zip)
