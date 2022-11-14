@@ -11,3 +11,10 @@ Or
 <script src="nacl.min.js"></script>
 <script src="saseul.pack.min.js"></script>
 ```
+
+# Build
+
+```shell
+$ npm install
+$ node <path>/build.js
+```

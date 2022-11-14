@@ -1,104 +1,104 @@
 (function () {
-    var s = SASEUL, c = s.Core, f = s.Enc = {
+    var saseul = SASEUL, core = saseul.Core, func = saseul.Enc = {
         SHORT_HASH_SIZE: 40,
         ID_HASH_SIZE: 44,
         HASH_SIZE: 64,
         HEX_TIME_SIZE: 14,
         TIME_HASH_SIZE: 78,
 
-        string: function (o) {
-            if (typeof o !== 'string') {
-                o = JSON.stringify(o);
+        string: function (obj) {
+            if (typeof obj !== 'string') {
+                obj = JSON.stringify(obj);
             }
 
-            return c.stringToUnicode(o.replaceAll('/', '\\/'));
+            return core.stringToUnicode(obj.replaceAll('/', '\\/'));
         },
 
-        hash: function (o) {
-            return c.hash('SHA256', this.string(o));
+        hash: function (obj) {
+            return core.hash('SHA256', this.string(obj));
         },
 
-        shortHash: function (o) {
-            return c.hash('RIPEMD160', this.hash(o));
+        shortHash: function (obj) {
+            return core.hash('RIPEMD160', this.hash(obj));
         },
 
-        checksum: function (h) {
-            return c.hash('SHA256', c.hash('SHA256', h)).substr(0, 4);
+        checksum: function (hash) {
+            return core.hash('SHA256', core.hash('SHA256', hash)).substr(0, 4);
         },
 
-        hextime: function(u) {
-            if (typeof u !== 'number') {
-                u = c.utime();
+        hextime: function(utime) {
+            if (typeof utime !== 'number') {
+                utime = core.utime();
             }
 
-            u = u.toString(16);
+            utime = utime.toString(16);
 
-            if (u.length > this.HEX_TIME_SIZE) {
-                return u.substr(0, this.HEX_TIME_SIZE);
+            if (utime.length > this.HEX_TIME_SIZE) {
+                return utime.substr(0, this.HEX_TIME_SIZE);
             }
 
-            return u.toString(16).padStart(this.HEX_TIME_SIZE, '0');
+            return utime.toString(16).padStart(this.HEX_TIME_SIZE, '0');
         },
 
-        timeHash: function(o, u) {
-            return this.hextime(u) + this.hash(o);
+        timeHash: function(obj, utime) {
+            return this.hextime(utime) + this.hash(obj);
         },
 
-        timeHashValidity: function(h) {
-            return this.isHex(h) === true && h.length === this.TIME_HASH_SIZE;
+        timeHashValidity: function(hash) {
+            return this.isHex(hash) === true && hash.length === this.TIME_HASH_SIZE;
         },
 
-        idHash: function (o) {
-            var h = this.shortHash(o);
+        idHash: function (obj) {
+            var short_hash = this.shortHash(obj);
 
-            return h + this.checksum(h);
+            return short_hash + this.checksum(short_hash);
         },
 
-        idHashValidity: function (i) {
-            return this.isHex(i) === true &&
-                i.length === this.ID_HASH_SIZE &&
-                this.checksum(i.substr(0, this.SHORT_HASH_SIZE)) === i.substr(-4);
+        idHashValidity: function (id_hash) {
+            return this.isHex(id_hash) === true &&
+                id_hash.length === this.ID_HASH_SIZE &&
+                this.checksum(id_hash.substr(0, this.SHORT_HASH_SIZE)) === id_hash.substr(-4);
         },
 
-        spaceId: function(w, s) {
-            return this.hash([w, s]);
+        spaceId: function(writer, space) {
+            return this.hash([writer, space]);
         },
 
-        txHash: function (t) {
-            return this.timeHash(this.hash(t), t.timestamp);
+        txHash: function (tx) {
+            return this.timeHash(this.hash(tx), tx.timestamp);
         },
 
-        isHex: function (h) {
-            if (typeof h !== 'string') {
+        isHex: function (str) {
+            if (typeof str !== 'string') {
                 return false;
             }
-            return (Boolean(h.match(/^[0-9a-f]+$/)));
+            return (Boolean(str.match(/^[0-9a-f]+$/)));
         },
 
-        parseCode: function (c) {
-            if (typeof c === "string") {
-                c = JSON.parse(c);
+        parseCode: function (code) {
+            if (typeof code === "string") {
+                code = JSON.parse(code);
             }
 
-            if (typeof c.w === 'undefined') {
+            if (typeof code.w === 'undefined') {
                 return {
-                    cid: SASEUL.Enc.spaceId(c.writer, c.nonce),
-                    name: c.name ?? '',
-                    writer: c.writer ?? '',
-                    type: c.type ?? '',
-                    version: c.version ?? '0',
-                    parameters: c.parameters ?? {},
-                    nonce: c.nonce ?? '',
+                    cid: SASEUL.Enc.spaceId(code.writer, code.nonce),
+                    name: code.name ?? '',
+                    writer: code.writer ?? '',
+                    type: code.type ?? '',
+                    version: code.version ?? '0',
+                    parameters: code.parameters ?? {},
+                    nonce: code.nonce ?? '',
                 }
             } else {
                 return {
-                    cid: SASEUL.Enc.spaceId(c.w, c.s),
-                    name: c.n ?? '',
-                    writer: c.w ?? '',
-                    type: c.t ?? '',
-                    version: c.v ?? '0',
-                    parameters: c.p ?? {},
-                    nonce: c.s ?? '',
+                    cid: SASEUL.Enc.spaceId(code.w, code.s),
+                    name: code.n ?? '',
+                    writer: code.w ?? '',
+                    type: code.t ?? '',
+                    version: code.v ?? '0',
+                    parameters: code.p ?? {},
+                    nonce: code.s ?? '',
                 }
             }
         },

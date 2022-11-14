@@ -1,58 +1,58 @@
 (function () {
-    var s = SASEUL, c = s.Core, e = s.Enc, f = s.Sign = {
+    var saseul = SASEUL, core = saseul.Core, enc = saseul.Enc, func = saseul.Sign = {
         KEY_SIZE: 64,
         SIGNATURE_SIZE: 128,
 
         keyPair: function ()
         {
-            var p = nacl.sign.keyPair();
-            var k = {};
+            var pair = nacl.sign.keyPair();
+            var result = {};
 
-            k.private_key = c.byteToHex(p.secretKey).substr(0, 64);
-            k.public_key = c.byteToHex(p.publicKey);
-            k.address = this.address(k.public_key);
+            result.private_key = core.byteToHex(pair.secretKey).substring(0, 64);
+            result.public_key = core.byteToHex(pair.publicKey);
+            result.address = this.address(result.public_key);
 
-            return k;
+            return result;
         },
 
         privateKey: function ()
         {
-            return c.byteToHex(nacl.sign.keyPair().secretKey).substr(0, 64);
+            return core.byteToHex(nacl.sign.keyPair().secretKey).substring(0, 64);
         },
 
-        publicKey: function (k)
+        publicKey: function (private_key)
         {
-            return c.byteToHex(nacl.sign.keyPair.fromSeed(c.hexToByte(k)).publicKey);
+            return core.byteToHex(nacl.sign.keyPair.fromSeed(core.hexToByte(private_key)).publicKey);
         },
 
-        address: function (k)
+        address: function (public_key)
         {
-            return e.idHash(k);
+            return enc.idHash(public_key);
         },
 
-        addressValidity: function (a)
+        addressValidity: function (address)
         {
-            return e.idHashValidity(a);
+            return enc.idHashValidity(address);
         },
 
-        signature: function (o, k)
+        signature: function (obj, private_key)
         {
-            return c.byteToHex(nacl.sign.detached(
-                c.stringToByte(e.string(o)), c.hexToByte(k + this.publicKey(k))
+            return core.byteToHex(nacl.sign.detached(
+                core.stringToByte(enc.string(obj)), core.hexToByte(private_key + this.publicKey(private_key))
             ));
         },
 
-        signatureValidity: function (o, k, g)
+        signatureValidity: function (obj, public_key, signature)
         {
-            return g.length === this.SIGNATURE_SIZE &&
-                e.isHex(g) === true && nacl.sign.detached.verify(
-                c.stringToByte(o), c.hexToByte(g), c.hexToByte(k)
+            return signature.length === this.SIGNATURE_SIZE &&
+                enc.isHex(signature) === true && nacl.sign.detached.verify(
+                core.stringToByte(obj), core.hexToByte(signature), core.hexToByte(public_key)
             );
         },
 
-        keyValidity: function (k)
+        keyValidity: function (key)
         {
-            return k.length === this.KEY_SIZE && e.isHex(k);
+            return key.length === this.KEY_SIZE && enc.isHex(key);
         },
     };
 })();

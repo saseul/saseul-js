@@ -1,114 +1,118 @@
 (function () {
-    var s = SASEUL, c = s.Core, e = s.Enc, g = s.Sign, f = s.Rpc = {
+    var saseul = SASEUL, core = saseul.Core, enc = saseul.Enc, sign = saseul.Sign, func = saseul.Rpc = {
         default_peers: [
             'main.saseul.net',
             'aroma.saseul.net',
             'blanc.saseul.net',
         ],
 
-        ping: function (h) {
-            if (typeof h !== 'object') {
-                h = this.default_peers;
+        ping: function (host_array) {
+            if (typeof host_array !== 'object') {
+                host_array = this.default_peers;
             }
 
-            return new Promise(function (_r) {
-                f._searchPeers(h, function (r) {
-                    f._queryRounds(r, function (r) {
-                        _r(r);
+            return new Promise(function (resolve) {
+                func._searchPeers(host_array, function (result) {
+                    func._queryRounds(result, function (result) {
+                        resolve(result);
                     })
                 })
             });
         },
 
-        searchPeers: function (h) {
-            if (typeof h !== 'object') {
-                h = this.default_peers;
+        searchPeers: function (host_array) {
+            if (typeof host_array !== 'object') {
+                host_array = this.default_peers;
             }
 
-            return new Promise(function (_r) {
-                f._searchPeers(h, function (r) {
-                    _r(r);
+            return new Promise(function (resolve) {
+                func._searchPeers(host_array, function (result) {
+                    resolve(result);
                 })
             });
         },
 
-        _searchPeers: function (h, b) {
-            f.multi(h, '/peer', { method: "POST", mode : "cors" },
-                function (r) {
-                    var _r = [];
-                    r.forEach(function (i) {
+        _searchPeers: function (host, callback) {
+            func.multi(host, '/peer', { method: "POST", mode : "cors" },
+                function (result) {
+                    var peer_array = [];
+                    result.forEach(function (req) {
                         try {
-                            Object.values(i.data.peers).forEach(function (j) {
-                                _r.push(j.host);
+                            Object.values(req.data.peers).forEach(function (peer) {
+                                peer_array.push(peer.host);
                             });
                         } catch (e) {}
                     });
-                    b([...new Set(_r)]);
+                    callback([...new Set(peer_array)]);
             });
         },
 
-        queryRounds: function (h) {
-            if (typeof h !== 'object') {
-                h = this.default_peers;
+        queryRounds: function (host_array) {
+            if (typeof host_array !== 'object') {
+                host_array = this.default_peers;
             }
 
-            return new Promise(function (_r) {
-                f._queryRounds(h, function (r) {
-                    _r(r);
+            return new Promise(function (resolve) {
+                func._queryRounds(host_array, function (result) {
+                    resolve(result);
                 })
             });
         },
 
-        _queryRounds: function (h, b) {
-            f.multi(
-                h, '/round?chain_type=all', { method: "POST", mode : "cors" },
-                function (r) {
-                    var _r = [];
-                    r.forEach(function (i) {
+        _queryRounds: function (host, callback) {
+            func.multi(
+                host, '/round?chain_type=all', { method: "POST", mode : "cors" },
+                function (result) {
+                    var items = [];
+                    result.forEach(function (req) {
                         try {
-                            _r.push({
-                                host: i.host,
-                                main: i.data.main.block,
-                                resource: i.data.resource.block
+                            items.push({
+                                host: req.host,
+                                main: req.data.main.block,
+                                resource: req.data.resource.block
                             });
                         } catch (e) {}
                     });
-                    b(_r);
+                    callback(items);
                 }
             );
         },
 
-        transaction: function (v, k) {
-            return this.data(v, k);
-        },
-
-        request: function (v, k) {
-            if (typeof k !== "string") {
-                k = g.privateKey();
+        transaction: function (data, private_key) {
+            if (typeof private_key !== "string") {
+                private_key = sign.privateKey();
             }
 
-            return this.data(v, k, "request");
+            return this.data(data, private_key);
         },
 
-        data: function (v, k, t = "transaction") {
-            var d = {};
+        request: function (data, private_key) {
+            if (typeof private_key !== "string") {
+                private_key = sign.privateKey();
+            }
+
+            return this.data(data, private_key, "request");
+        },
+
+        data: function (item, private_key, type = "transaction") {
+            var result = {};
 
             try {
-                v.from = g.address(g.publicKey(k));
+                item.from = sign.address(sign.publicKey(private_key));
 
-                if (typeof v.timestamp !== 'number') {
-                    v.timestamp = c.utime();
+                if (typeof item.timestamp !== 'number') {
+                    item.timestamp = core.utime();
                 }
 
-                d[t] = v;
-                d.public_key = g.publicKey(k);
-                d.signature = g.signature(e.txHash(v), k);
+                result[type] = item;
+                result.public_key = sign.publicKey(private_key);
+                result.signature = sign.signature(enc.txHash(item), private_key);
 
-                return d;
+                return result;
 
             } catch (_e) {
-                if (!g.keyValidity(k)) {
-                    console.error('Invalid private key: ' + k);
+                if (!sign.keyValidity(private_key)) {
+                    console.error('Invalid private key: ' + private_key);
                     return {};
                 }
 
@@ -117,92 +121,88 @@
             }
         },
 
-        send: function (o, h) {
-            var p, b = new FormData();
+        send: function (data, host) {
+            var url_path, body = new FormData();
 
-            if (typeof h !== "string") {
+            if (typeof host !== "string") {
                 console.error('The host URL is required. ');
-                return new Promise(function (_r) {
-                    _r({ code: 999, msg: "The host URL is required. " });
+                return new Promise(function (resolve) {
+                    resolve({ code: 999, msg: "The host URL is required. " });
                 });
             }
 
-            if (typeof o.transaction === "object") {
-                b.append("transaction", e.string(o.transaction));
-                p = h + '/sendtransaction';
+            if (typeof data.transaction === "object") {
+                body.append("transaction", enc.string(data.transaction));
+                url_path = host + '/sendtransaction';
             } else {
-                b.append("request", e.string(o.request));
-                p = h + '/request';
+                body.append("request", enc.string(data.request));
+                url_path = host + '/request';
             }
 
-            b.append("public_key", o.public_key);
-            b.append("signature", o.signature);
+            body.append("public_key", data.public_key);
+            body.append("signature", data.signature);
 
-            return new Promise(function (_r) {
-                f._send(b, p, function (r) {
-                    _r(r);
+            return new Promise(function (resolve) {
+                func._send(body, url_path, function (result) {
+                    resolve(result);
                 })
             });
         },
 
-        _send: function (form_data, url_path, callback) {
-            fetch(f.wrapProtocol(url_path), {
+        _send: function (body, url_path, callback) {
+            fetch(func.wrapUrl(url_path), {
                 method: "POST",
                 mode: "cors",
-                body: form_data,
+                body: body,
             }).then(
-                (function (r) { return r.json() }),
-                (function (r) { return { code: 999, msg: r.message }; })
+                (function (result) { return result.json() }),
+                (function (result) { return { code: 999, msg: result.message }; })
             ).then(
-                (function (r) {
-                    callback(r);
+                (function (result) {
+                    callback(result);
                 })
             );
         },
 
         multi: function (urls, path, option, callback, max_number = 9) {
-            var _t = [], _n = 0, _z = Math.min(urls.length, max_number);
+            var items = [], req_count = 0, req_limit = Math.min(urls.length, max_number);
 
             urls = this.shuffle(urls);
-            urls.forEach(function (_a, _i) {
-                if (_i < _z) {
-                    fetch(f.wrapProtocol(_a + path), option)
-                        .then(
-                            (function (r) { return r.json(); }),
-                            (function (r) { return { code: 999, msg: r.message }; })
-                        )
-                        .then(
-                            (function (r) {
+            urls.forEach(function (host, i) {
+                if (i < req_limit) {
+                    fetch(func.wrapUrl(host + path), option)
+                        .then((function (result) { return result.json(); }),
+                            (function (result) { return { code: 999, msg: result.message }; }))
+                        .then((function (result) {
                                 try {
-                                    _t.push({
-                                        host: _a,
-                                        data: r.data
+                                    items.push({
+                                        host: host,
+                                        data: result.data
                                     });
                                 } catch (e) {}
 
-                                if (_n++ === _z - 1) {
+                                if (req_count++ === req_limit - 1) {
                                     try {
-                                        callback(_t);
+                                        callback(items);
                                     } catch (e) {}
                                 }
-                            })
-                        );
+                            }));
                 }
             });
         },
 
-        shuffle: function (a) {
-            return a.map(v => ({ v, i: Math.random() }))
+        shuffle: function (array) {
+            return array.map(v => ({ v, i: Math.random() }))
                 .sort((x, y) => x.i - y.i)
                 .map(({ v }) => v)
         },
 
-        wrapProtocol: function (u) {
-            if (u.substring(0, 7) === 'http://' || u.substring(0, 8) === 'https://' || u.substring(0, 2) === '//') {
-                return u;
+        wrapUrl: function (url_path) {
+            if (url_path.substring(0, 7) === 'http://' || url_path.substring(0, 8) === 'https://' || url_path.substring(0, 2) === '//') {
+                return url_path;
             }
 
-            return '//' + u;
+            return '//' + url_path;
         }
     };
 })();

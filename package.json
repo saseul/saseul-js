@@ -30,8 +30,10 @@
     "bignumber.js": "^9.0.2",
     "crypto-js": "^4.1.1",
     "form-data": "^4.0.0",
+    "fs": "^0.0.1-security",
     "locutus": "^2.0.16",
     "node-fetch": "2.6.x",
+    "terser": "^5.15.1",
     "tweetnacl": "^1.0.3"
   },
   "files": [
