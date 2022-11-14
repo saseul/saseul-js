@@ -15,10 +15,10 @@ const terser = require('terser');
     let sign = __dirname + "/saseul/sign.js";
     let rpc = __dirname + "/saseul/rpc.js";
 
-    let cryptojs = __dirname + "/crypto.pack.min.js";
-    let nacl = __dirname + "/nacl.min.js";
+    let cryptojs = __dirname + "/pack/crypto.pack.min.js";
+    let nacl = __dirname + "/pack/nacl.min.js";
 
-    let pack = __dirname + "/saseul.pack.min.js";
+    let pack = __dirname + "/pack/saseul.pack.min.js";
     let min = __dirname + "/saseul.min.js";
 
     let output = '';
