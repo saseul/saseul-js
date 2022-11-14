@@ -178,7 +178,11 @@
     ));
 
     SASEUL.Rpc.ping().then(function (r) { document.getElementById('rpc-ping').innerHTML = JSON.stringify(r); });
-    SASEUL.Rpc.searchPeers().then(function (r) { document.getElementById('rpc-searchPeers').innerHTML = JSON.stringify(r); });
+    SASEUL.Rpc.searchPeers([
+        "https://main.saseul.net",
+        "https://aroma.saseul.net",
+        "https://blanc.saseul.net",
+    ]).then(function (r) { document.getElementById('rpc-searchPeers').innerHTML = JSON.stringify(r); });
     SASEUL.Rpc.queryRounds().then(function (r) { document.getElementById('rpc-queryRounds').innerHTML = JSON.stringify(r); });
 
     SASEUL.Rpc.send(
@@ -189,7 +193,7 @@
                 amount: "1"
             },
             'bbbdd1f301b5ab75deba2a6968e1e565eb9022102565e7cfa1169660dc0e2780'
-        )
+        ), "https://main.saseul.net"
     ).then(function (r) { document.getElementById('rpc-send-tx').innerHTML = JSON.stringify(r); });
 
     SASEUL.Rpc.send(
@@ -198,7 +202,7 @@
                 type: "GetBalance",
                 address: "f8df34871e7d7d4b4bcb948fd41e0d4a362a6398043e",
             }
-        )
+        ), "https://main.saseul.net"
     ).then(function (r) { document.getElementById('rpc-send-req').innerHTML = JSON.stringify(r); });
 
 </script>
