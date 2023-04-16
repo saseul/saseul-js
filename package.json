@@ -1,6 +1,6 @@
 {
   "name": "saseul",
-  "version": "2.7.13",
+  "version": "2.7.14",
   "description": "Javascript API Library for SASEUL blockchain",
   "main": "index.js",
   "keywords": [
@@ -29,12 +29,13 @@
     "tweetnacl": "^1.0.3"
   },
   "scripts": {
-    "test": "test.js"
+    "test": "node test.js"
   },
   "files": [
     "src",
     "cdn",
     "index.js",
+    "test.js",
     "LICENSE",
     "package.json",
     "README.md"
