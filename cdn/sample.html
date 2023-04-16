@@ -2,209 +2,77 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SASEUL Test</title>
-    <style>
-        pre {
-            white-space: pre-wrap;
-            white-space: -moz-pre-wrap;
-            white-space: -o-pre-wrap;
-            word-break: break-all;
-        }
-    </style>
+    <title>Test</title>
 </head>
 <body>
-<h1>Core</h1>
-<h3>function: hash</h3>
-<pre id="core-hash"></pre>
-
-<h3>function: time</h3>
-<pre id="core-time"></pre>
-
-<h3>function: utime</h3>
-<pre id="core-utime"></pre>
-
-<h3>function: randomHexString</h3>
-<pre id="core-randomHexString"></pre>
-
-<h3>function: hexToByte</h3>
-<pre id="core-hexToByte"></pre>
-
-<h3>function: byteToHex</h3>
-<pre id="core-byteToHex"></pre>
-
-<h3>function: stringToByte</h3>
-<pre id="core-stringToByte"></pre>
-
-<h3>function: stringToUnicode</h3>
-<pre id="core-stringToUnicode"></pre>
-
-<h1>Enc</h1>
-<h3>function: string</h3>
-<pre id="enc-string"></pre>
-
-<h3>function: hash</h3>
-<pre id="enc-hash"></pre>
-
-<h3>function: shortHash</h3>
-<pre id="enc-shortHash"></pre>
-
-<h3>function: checksum</h3>
-<pre id="enc-checksum"></pre>
-
-<h3>function: hextime</h3>
-<pre id="enc-hextime"></pre>
-
-<h3>function: timeHash</h3>
-<pre id="enc-timeHash"></pre>
-
-<h3>function: timeHashValidity</h3>
-<pre id="enc-timeHashValidity"></pre>
-
-<h3>function: idHash</h3>
-<pre id="enc-idHash"></pre>
-
-<h3>function: idHashValidity</h3>
-<pre id="enc-idHashValidity"></pre>
-
-<h3>function: spaceId</h3>
-<pre id="enc-spaceId"></pre>
-
-<h3>function: txHash</h3>
-<pre id="enc-txHash"></pre>
-
-<h3>function: isHex</h3>
-<pre id="enc-isHex"></pre>
-
-<h1>Sign</h1>
-<h3>function: keyPair</h3>
-<pre id="sign-keyPair"></pre>
-
-<h3>function: privateKey</h3>
-<pre id="sign-privateKey"></pre>
-
-<h3>function: publicKey</h3>
-<pre id="sign-publicKey"></pre>
-
-<h3>function: address</h3>
-<pre id="sign-address"></pre>
-
-<h3>function: addressValidity</h3>
-<pre id="sign-addressValidity"></pre>
-
-<h3>function: signature</h3>
-<pre id="sign-signature"></pre>
-
-<h3>function: signatureValidity</h3>
-<pre id="sign-signatureValidity"></pre>
-
-<h3>function: keyValidity</h3>
-<pre id="sign-keyValidity"></pre>
-
-<h1>Rpc</h1>
-<h3>function: transaction</h3>
-<pre id="rpc-transaction"></pre>
-
-<h3>function: request</h3>
-<pre id="rpc-request"></pre>
-
-<h3>function: ping</h3>
-<pre id="rpc-ping"></pre>
-
-<h3>function: searchPeers</h3>
-<pre id="rpc-searchPeers"></pre>
-
-<h3>function: queryRounds</h3>
-<pre id="rpc-queryRounds"></pre>
-
-<h3>function: send (transaction)</h3>
-<pre id="rpc-send-tx"></pre>
-
-<h3>function: send (request)</h3>
-<pre id="rpc-send-req"></pre>
-
-<!--<script src="crypto.pack.min.js"></script>-->
-<!--<script src="nacl.min.js"></script>-->
-<!--<script src="saseul/core.js"></script>-->
-<!--<script src="saseul/enc.js"></script>-->
-<!--<script src="saseul/sign.js"></script>-->
-<!--<script src="saseul/rpc.js"></script>-->
-<script src="saseul.min.js"></script>
+<div id="contents"></div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tweetnacl/1.0.2/nacl.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.5/axios.min.js"></script>
+<script type="text/javascript" src="saseul.min.js"></script>
 <script type="text/javascript">
-    document.getElementById('core-hash').innerHTML = SASEUL.Core.hash('SHA256', 'a');
-    document.getElementById('core-time').innerHTML = SASEUL.Core.time();
-    document.getElementById('core-utime').innerHTML = SASEUL.Core.utime();
-    document.getElementById('core-randomHexString').innerHTML = SASEUL.Core.randomHexString(2);
-    document.getElementById('core-hexToByte').innerHTML = SASEUL.Core.hexToByte('aa');
-    document.getElementById('core-byteToHex').innerHTML = SASEUL.Core.byteToHex('bb');
-    document.getElementById('core-stringToByte').innerHTML = SASEUL.Core.stringToByte('bb');
-    document.getElementById('core-stringToUnicode').innerHTML = SASEUL.Core.stringToUnicode('//-\\');
+    let contents = document.getElementById('contents');
+    let test = {
+        "SASEUL.Util.time": SASEUL.Util.time(),
+        "SASEUL.Util.utime": SASEUL.Util.utime(),
+        "SASEUL.Util.randomHexString": SASEUL.Util.randomHexString(16),
+        "SASEUL.Util.hexToByte": SASEUL.Util.hexToByte("4d8ba12d63613dda822a69bc5ac1c589"),
+        "SASEUL.Util.byteToHex": SASEUL.Util.byteToHex([ 77, 139, 161,  45, 99, 97,  61, 218, 130, 42, 105, 188,  90, 193, 197, 137 ]),
+        "SASEUL.Util.stringToByte": SASEUL.Util.stringToByte("Lorem ipsum"),
+        "SASEUL.Util.stringToUnicode": SASEUL.Util.stringToUnicode("다람쥐헌쳇바퀴에타고파"),
 
-    document.getElementById('enc-string').innerHTML = SASEUL.Enc.string({a:"b"});
-    document.getElementById('enc-hash').innerHTML = SASEUL.Enc.hash('a');
-    document.getElementById('enc-shortHash').innerHTML = SASEUL.Enc.shortHash('a');
-    document.getElementById('enc-checksum').innerHTML = SASEUL.Enc.checksum('a');
-    document.getElementById('enc-hextime').innerHTML = SASEUL.Enc.hextime();
-    document.getElementById('enc-timeHash').innerHTML = SASEUL.Enc.timeHash('a');
-    document.getElementById('enc-timeHashValidity').innerHTML = SASEUL.Enc.timeHashValidity('5ec1688f68fe8ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb');
-    document.getElementById('enc-idHash').innerHTML = SASEUL.Enc.idHash('b');
-    document.getElementById('enc-idHashValidity').innerHTML = SASEUL.Enc.idHashValidity('1868700ac287eaefdffda1440773591ea8f9f45d4a51');
-    document.getElementById('enc-spaceId').innerHTML = SASEUL.Enc.spaceId('1868700ac287eaefdffda1440773591ea8f9f45d4a51', 'a');
-    document.getElementById('enc-txHash').innerHTML = SASEUL.Enc.txHash({timestamp: 1666956713737000});
-    document.getElementById('enc-isHex').innerHTML = SASEUL.Enc.isHex('ab');
+        "SASEUL.Enc.string": SASEUL.Enc.string({}),
+        "SASEUL.Enc.hash": SASEUL.Enc.hash({}),
+        "SASEUL.Enc.shortHash": SASEUL.Enc.shortHash({}),
+        "SASEUL.Enc.checksum": SASEUL.Enc.checksum('62b7341d7271ea3b5ad12011a9467d8ba2736623'),
+        "SASEUL.Enc.hextime": SASEUL.Enc.hextime(1681133629023000),
+        "SASEUL.Enc.timeHash": SASEUL.Enc.timeHash({}, 1681133629023000),
+        "SASEUL.Enc.timeHashValidity": SASEUL.Enc.timeHashValidity('05f8fb6cc7231844136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a'),
+        "SASEUL.Enc.idHash": SASEUL.Enc.idHash({}),
+        "SASEUL.Enc.idHashValidity": SASEUL.Enc.idHashValidity('62b7341d7271ea3b5ad12011a9467d8ba2736623be3b'),
+        "SASEUL.Enc.spaceId": SASEUL.Enc.spaceId({}),
+        "SASEUL.Enc.txHash": SASEUL.Enc.txHash({}),
+        "SASEUL.Enc.isHex": SASEUL.Enc.isHex('62b7341d7271ea3b5ad12011a9467d8ba2736623'),
+        "SASEUL.Enc.parseCode": SASEUL.Enc.parseCode({}),
 
-    document.getElementById('sign-keyPair').innerHTML = SASEUL.Enc.string(SASEUL.Sign.keyPair());
-    document.getElementById('sign-privateKey').innerHTML = SASEUL.Sign.privateKey();
-    document.getElementById('sign-publicKey').innerHTML = SASEUL.Sign.publicKey('bbbdd1f301b5ab75deba2a6968e1e565eb9022102565e7cfa1169660dc0e2780');
-    document.getElementById('sign-address').innerHTML = SASEUL.Sign.address('a7c015d0c3630b0633de14b0c83a4851c6a43b00faa75ae234b56b00d2015295');
-    document.getElementById('sign-addressValidity').innerHTML = SASEUL.Sign.addressValidity('f8df34871e7d7d4b4bcb948fd41e0d4a362a6398043e');
-    document.getElementById('sign-signature').innerHTML = SASEUL.Sign.signature('a', 'bbbdd1f301b5ab75deba2a6968e1e565eb9022102565e7cfa1169660dc0e2780');
-    document.getElementById('sign-signatureValidity').innerHTML = SASEUL.Sign.signatureValidity('a', 'a7c015d0c3630b0633de14b0c83a4851c6a43b00faa75ae234b56b00d2015295', 'e89b0a4df2e9b3e78c86d6e562b77bc6003e30c869f24e583d265172d02f30d84ffb911e6ad9e13cd416f0dfa1b1f7a0633b10240b3685d46c29159b8952510c');
-    document.getElementById('sign-keyValidity').innerHTML = SASEUL.Sign.keyValidity('bbbdd1f301b5ab75deba2a6968e1e565eb9022102565e7cfa1169660dc0e2780');
+        "SASEUL.Sign.keyPair": SASEUL.Sign.keyPair(),
+        "SASEUL.Sign.privateKey": SASEUL.Sign.privateKey(),
+        "SASEUL.Sign.publicKey": SASEUL.Sign.publicKey('cd654a234b59a64c20781243d161f8b40b9e87d4ea2be1904e66497e22ccefa9'),
+        "SASEUL.Sign.address": SASEUL.Sign.address('107acd459a0522abc4bab6719e30622bd9e08a9a54cd75dd76ce3f5f9dae846d'),
+        "SASEUL.Sign.addressValidity": SASEUL.Sign.addressValidity('4c717ef70937f957bbec120e2750192b9faeb139a48b'),
+        "SASEUL.Sign.signature": SASEUL.Sign.signature({}, 'cd654a234b59a64c20781243d161f8b40b9e87d4ea2be1904e66497e22ccefa9'),
+        "SASEUL.Sign.signatureValidity": SASEUL.Sign.signatureValidity({}, '107acd459a0522abc4bab6719e30622bd9e08a9a54cd75dd76ce3f5f9dae846d', '5bee79b196bf77077f9f5c97c3775ce90dd1676e25bbad21268edcbe2a607c253dad3b367e89f8d3b0605304ab299b88b78e73ed1fb6019bd60c9f2d2cdc4506'),
+        "SASEUL.Sign.keyValidity": SASEUL.Sign.keyValidity('cd654a234b59a64c20781243d161f8b40b9e87d4ea2be1904e66497e22ccefa9'),
 
-    document.getElementById('rpc-transaction').innerHTML = JSON.stringify(SASEUL.Rpc.transaction(
-        {
-            type: "Send",
-            to: "f8df34871e7d7d4b4bcb948fd41e0d4a362a6398043e",
-            amount: "1"
-        },
-        'bbbdd1f301b5ab75deba2a6968e1e565eb9022102565e7cfa1169660dc0e2780'
-    ));
+        "SASEUL.Rpc.endpoint": SASEUL.Rpc.endpoint('blanc.saseul.net'),
+        "SASEUL.Rpc.tracker": SASEUL.Rpc.tracker(),
+        "SASEUL.Rpc.peer": SASEUL.Rpc.peer(),
+        "SASEUL.Rpc.ping": SASEUL.Rpc.ping(),
+        "SASEUL.Rpc.round": SASEUL.Rpc.round(),
+        "SASEUL.Rpc.signedRequest": SASEUL.Rpc.signedRequest({"type":"GetBalance","address":"4c717ef70937f957bbec120e2750192b9faeb139a48b"}, SASEUL.Sign.privateKey()),
+        "SASEUL.Rpc.signedTransaction": SASEUL.Rpc.signedTransaction({"type":"Send","to":"4c717ef70937f957bbec120e2750192b9faeb139a48b","amount":"1"}, SASEUL.Sign.privateKey()),
+        "SASEUL.Rpc.request": SASEUL.Rpc.request(SASEUL.Rpc.signedRequest({"type":"GetBalance","address":"4c717ef70937f957bbec120e2750192b9faeb139a48b"}, SASEUL.Sign.privateKey())),
+        "SASEUL.Rpc.sendTransaction": SASEUL.Rpc.sendTransaction(SASEUL.Rpc.signedTransaction({"type":"Send","to":"4c717ef70937f957bbec120e2750192b9faeb139a48b","amount":"1"}, SASEUL.Sign.privateKey())),
+        "SASEUL.Rpc.broadcastTransaction": SASEUL.Rpc.broadcastTransaction(SASEUL.Rpc.signedTransaction({"type":"Send","to":"4c717ef70937f957bbec120e2750192b9faeb139a48b","amount":"1"}, SASEUL.Sign.privateKey())),
+        "SASEUL.Rpc.estimatedFee": SASEUL.Rpc.estimatedFee(SASEUL.Rpc.signedTransaction({"type":"Send","to":"4c717ef70937f957bbec120e2750192b9faeb139a48b","amount":"1"}, SASEUL.Sign.privateKey())),
+    };
 
-    document.getElementById('rpc-request').innerHTML = JSON.stringify(SASEUL.Rpc.request(
-        {
-            type: "GetBalance",
-            address: "f8df34871e7d7d4b4bcb948fd41e0d4a362a6398043e",
+    for (let i in test) {
+        if (typeof test[i] === 'undefined') {
+            contents.innerHTML+= `<h1>${i}</h1><pre>${test[i]}</pre>`;
+        } else if (typeof test[i].then === 'undefined') {
+            contents.innerHTML+= `<h1>${i}</h1><pre>${JSON.stringify(test[i], null, 2)}</pre>`;
+        } else {
+            let id = SASEUL.Util.randomHexString(8);
+            contents.innerHTML+= `<h1>${i}</h1><pre id="${id}"></pre>`;
+
+            test[i].then(function (r) {
+                document.getElementById(id).innerHTML+= JSON.stringify(r, null, 2);
+            }).catch(function (e) {
+                document.getElementById(id).innerHTML+= JSON.stringify(e, null, 2);
+            });
         }
-    ));
-
-    SASEUL.Rpc.ping().then(function (r) { document.getElementById('rpc-ping').innerHTML = JSON.stringify(r); });
-    SASEUL.Rpc.searchPeers([
-        "https://main.saseul.net",
-        "https://aroma.saseul.net",
-        "https://blanc.saseul.net",
-    ]).then(function (r) { document.getElementById('rpc-searchPeers').innerHTML = JSON.stringify(r); });
-    SASEUL.Rpc.queryRounds().then(function (r) { document.getElementById('rpc-queryRounds').innerHTML = JSON.stringify(r); });
-
-    SASEUL.Rpc.send(
-        SASEUL.Rpc.transaction(
-            {
-                type: "Send",
-                to: SASEUL.Sign.address(SASEUL.Sign.publicKey(SASEUL.Sign.privateKey())),
-                amount: "1"
-            },
-            'bbbdd1f301b5ab75deba2a6968e1e565eb9022102565e7cfa1169660dc0e2780'
-        ), "https://main.saseul.net"
-    ).then(function (r) { document.getElementById('rpc-send-tx').innerHTML = JSON.stringify(r); });
-
-    SASEUL.Rpc.send(
-        SASEUL.Rpc.request(
-            {
-                type: "GetBalance",
-                address: "f8df34871e7d7d4b4bcb948fd41e0d4a362a6398043e",
-            }
-        ), "https://main.saseul.net"
-    ).then(function (r) { document.getElementById('rpc-send-req').innerHTML = JSON.stringify(r); });
-
+    }
 </script>
 </body>
 </html>
