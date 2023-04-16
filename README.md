@@ -19,15 +19,13 @@ You can also create and register smart contracts that operate on the SASEUL netw
 
 If you need information about SASEUL, you can refer to the link below.
 
-SASEUL Website: https://saseul.com
-
-Guardee Wallet: https://applink.guardee.io/
-
-Block Explorer: https://explorer.saseul.com/
+- SASEUL Website: https://saseul.com
+- Guardee Wallet: https://applink.guardee.io/
+- Block Explorer: https://explorer.saseul.com/
 
 If you want to install the SASEUL engine, you can refer to the link below.
 
-Docker: https://hub.docker.com/r/artifriends/saseul-network
+- Docker: https://hub.docker.com/r/artifriends/saseul-network
 
 # Installation
 
