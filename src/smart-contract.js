@@ -71,6 +71,12 @@
                 short_hash: function (vars = []) { return {"$short_hash": [vars]}; },
                 id_hash: function (vars = []) { return {"$id_hash": [vars]}; },
                 sign_verify: function (obj = null, public_key = '', signature = '') { return {"$sign_verify": [obj, public_key, signature]}; },
+
+                /* ChainOperator */
+                get_block: function (target, full) { return {"$get_block": [target, full]}; },
+                get_resource_block: function (target, full) { return {"$get_resource_block": [target, full]}; },
+                get_transaction: function (target) { return {"$get_transaction": [target]}; },
+                list_universal: function (attr, page, count) { return {"$list_universal": [attr, page, count]}; },
             },
 
             Contract: function (writer, nonce) {
