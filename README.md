@@ -66,7 +66,7 @@ console.dir(keypair);
 
 Here is an example output of a generated key pair.
 
-```json
+```shell
 {
   private_key: 'c3baba5ea51b59c3b213bdac25b25ea75c5e6e5f9f78626757e5f197628aadd6',
   public_key: 'a8a0fb61c8e321592fea67a051f7f73b14fdb86b7974899fa9bf41ed59fe6500',
