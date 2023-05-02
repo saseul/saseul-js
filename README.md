@@ -163,6 +163,8 @@ SASEUL Docs: https://docs.saseul.com/
 
 If you would like to contact the SASEUL team directly regarding example implementation, please inquire at the following email address.
 
+e-mail: help@artifriends.com
+
 # Release Note
 
 - `2.7.0 ~` Compatible with SASEUL(`2.1.6 ~`)
