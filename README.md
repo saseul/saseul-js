@@ -80,7 +80,7 @@ The following example is an example of querying a balance in the test-net enviro
 
 When creating your own example, please replace the value of 'private_key' with the key pair you generated.
 
-```nodejs
+```javascript
 const SASEUL = require('saseul');
 
 (async function () {
@@ -107,7 +107,7 @@ For testing purposes, we have deployed a faucet contract on the test-net.
 
 The following example is an example of generating and broadcasting a faucet transaction in the test-net environment.
 
-```nodejs
+```javascript
 const SASEUL = require('saseul');
 
 (async function () {
@@ -134,7 +134,7 @@ The following example is an example of generating and broadcasting a transaction
 
 Since the decimal point of SL is 18 digits, you need to add 18 zeros to the 'amount'.
 
-```nodejs
+```javascript
 const SASEUL = require('saseul');
 
 (async function () {
