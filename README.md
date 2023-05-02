@@ -12,11 +12,16 @@ SaseulJS is a toolkit for developing decentralized applications based on the SAS
 You can use this toolkit to create and send transactions and requests to the SASEUL network.
 You can also create and register smart contracts that operate on the SASEUL network.
 
+If you would like to contact the SASEUL team directly regarding example implementation, please inquire at the following email address.
+
+e-mail: help@artifriends.com
+
 If you need information about SASEUL, you can refer to the link below.
 
 - SASEUL Website: https://saseul.com
 - Guardee Wallet: https://applink.guardee.io/
 - Block Explorer: https://explorer.saseul.com/
+- SASEUL Docs: https://docs.saseul.com/
 
 If you want to install the SASEUL engine, you can refer to the link below.
 
@@ -155,15 +160,9 @@ const SASEUL = require('saseul');
 }
 ```
 
-You can find more information on the following website.
+If you need an example of writing a smart contract, please refer to the following repository.
 
-Sample contracts: https://github.com/saseul/sample-contracts
-
-SASEUL Docs: https://docs.saseul.com/
-
-If you would like to contact the SASEUL team directly regarding example implementation, please inquire at the following email address.
-
-e-mail: help@artifriends.com
+- Sample contracts: https://github.com/saseul/sample-contracts
 
 # Release Note
 
