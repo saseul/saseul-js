@@ -6,11 +6,6 @@
 
 [![NPM Downloads][npm-downloads-image]][npm-downloads-url]
 
-# Release Note
-
-- `2.7.0 ~` Compatible with SASEUL(`2.1.6 ~`)
-- `< 2.6.10` Compatible with SASEUL(`< 2.1.5`)
-
 # Overview
 
 SaseulJS is a toolkit for developing decentralized applications based on the SASEUL blockchain engine.
@@ -48,11 +43,130 @@ Browser:
 
 # Quick Start
 
-    $ npm install saseul
+First, please install [node.js.](https://nodejs.org/)
 
-# Documentation
+Then, you can use the following command to install [saseul-js.](https://www.npmjs.com/package/saseul)
 
-See also: [SASEUL Docs](https://docs.saseul.com/)
+```shell
+$ npm install saseul
+```
+
+To create transactions on the SASEUL network, you need to generate an address that can initiate transactions. 
+
+The following example demonstrates how to create a key pair that is used in the SASEUL network.
+
+
+```nodejs
+const SASEUL = require('saseul');
+
+let keypair = SASEUL.Sign.keyPair();
+
+console.dir(keypair);
+```
+
+Here is an example output of a generated key pair.
+
+```json
+{
+  private_key: 'c3baba5ea51b59c3b213bdac25b25ea75c5e6e5f9f78626757e5f197628aadd6',
+  public_key: 'a8a0fb61c8e321592fea67a051f7f73b14fdb86b7974899fa9bf41ed59fe6500',
+  address: 'e3a978597ce1429e8d0070c99d1d429fd11c69514e81'
+}
+```
+
+Now we can use this key pair to create transactions to be sent to the main-net or test-net environment.
+
+The following example is an example of querying a balance in the test-net environment.
+
+When creating your own example, please replace the value of 'private_key' with the key pair you generated.
+
+```nodejs
+const SASEUL = require('saseul');
+
+(async function () {
+    SASEUL.Rpc.endpoint("test.saseul.net");
+
+    let private_key = "c3baba5ea51b59c3b213bdac25b25ea75c5e6e5f9f78626757e5f197628aadd6"
+    let address = SASEUL.Sign.address(SASEUL.Sign.publicKey(private_key));
+
+    let signed_request = SASEUL.Rpc.signedRequest({
+        "type": "GetBalance",
+        "address": address
+    }, private_key);
+
+    let result = await SASEUL.Rpc.request(signed_request);
+    let balance = result.data.balance;
+
+    console.dir(balance);
+}
+```
+
+Now the newly generated address has no balance.
+
+For testing purposes, we have deployed a faucet contract on the test-net.
+
+The following example is an example of generating and broadcasting a faucet transaction in the test-net environment.
+
+```nodejs
+const SASEUL = require('saseul');
+
+(async function () {
+    SASEUL.Rpc.endpoint("test.saseul.net");
+
+    let private_key = "c3baba5ea51b59c3b213bdac25b25ea75c5e6e5f9f78626757e5f197628aadd6"
+    let address = SASEUL.Sign.address(SASEUL.Sign.publicKey(private_key));
+
+    let signed_request = SASEUL.Rpc.signedTransaction({
+        "type": "Faucet"
+    }, private_key);
+
+    let result = await SASEUL.Rpc.broadcastTransaction(signed_request);
+
+    console.dir(result);
+}
+```
+
+After a few seconds, if you check the balance again, you can confirm that the balance has been added.
+
+Now you can send SL to other people.
+
+The following example is an example of generating and broadcasting a transaction that sends 125 SL in the testnet environment.
+
+Since the decimal point of SL is 18 digits, you need to add 18 zeros to the 'amount'.
+
+```nodejs
+const SASEUL = require('saseul');
+
+(async function () {
+    SASEUL.Rpc.endpoint("test.saseul.net");
+
+    let private_key = "c3baba5ea51b59c3b213bdac25b25ea75c5e6e5f9f78626757e5f197628aadd6"
+    let address = SASEUL.Sign.address(SASEUL.Sign.publicKey(private_key));
+
+    let signed_request = SASEUL.Rpc.signedTransaction({
+        "type": "Send",
+        "to": "33f02e5c52f688ba68b5e32ee2e4079df2cf839882aa",
+        "amount": "125000000000000000000"
+    }, private_key);
+
+    let result = await SASEUL.Rpc.broadcastTransaction(signed_request);
+
+    console.dir(result);
+}
+```
+
+You can find more information on the following website.
+
+Sample contracts: https://github.com/saseul/sample-contracts
+
+SASEUL Docs: https://docs.saseul.com/
+
+If you would like to contact the SASEUL team directly regarding example implementation, please inquire at the following email address.
+
+# Release Note
+
+- `2.7.0 ~` Compatible with SASEUL(`2.1.6 ~`)
+- `< 2.6.10` Compatible with SASEUL(`< 2.1.5`)
 
 # License
 
