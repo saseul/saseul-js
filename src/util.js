@@ -12,23 +12,22 @@
         var saseul = SASEUL, util = saseul.Util = {
 
             time: function () {
-                return parseInt(new Date().getTime() / 1000);
+                return Math.floor(Date.now() / 1000);
             },
 
             utime: function () {
-                return parseInt((new Date().getTime()) + '000');
+                return Date.now() * 1000;
             },
 
             uceiltime: function () {
-                return ((this.time() + 1) * 1000000);
+                return Math.ceil(Date.now() / 1000) * 1000000;
             },
 
-            randomHexString: function (byte_length) {
-                var result = '';
+            randomHexString: function (num_bytes) {
+                let result = '';
 
-                for (var i = 0; i < byte_length * 2; i++) {
-                    var char = Math.floor(Math.random() * 16);
-                    result += char.toString(16);
+                for (let i = 0; i < num_bytes * 2; i++) {
+                    result += Math.floor(Math.random() * 16).toString(16);
                 }
 
                 return result;
@@ -39,12 +38,13 @@
                     return new Uint8Array();
                 }
 
-                var byte_array = [];
-                for (var i = 0, length = hex.length; i < length; i += 2) {
-                    byte_array.push(parseInt(hex.substr(i, 2), 16));
+                let bytes = [];
+
+                for (let i = 0, length = hex.length; i < length; i += 2) {
+                    bytes.push(parseInt(hex.slice(i, i + 2), 16));
                 }
 
-                return new Uint8Array(byte_array);
+                return new Uint8Array(bytes);
             },
 
             byteToHex: function (byte_array) {
@@ -52,21 +52,18 @@
                     return '';
                 }
 
-                var result = '';
-                for (var i = 0; i < byte_array.length; i++) {
-                    var hex = (byte_array[i] & 0xff).toString(16);
-                    hex = (hex.length === 1) ? '0' + hex : hex;
-                    result += hex;
-                }
-
-                return result.toLowerCase();
+                return Array.prototype.map.call(byte_array, function(byte) {
+                    return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+                }).join('').toLowerCase();
             },
 
             stringToByte: function (str) {
-                var byte_array = new Uint8Array(new ArrayBuffer(str.length));
-                for (var i = 0, l = str.length; i < l; i++) {
+                let byte_array = new Uint8Array(str.length);
+
+                for (let i = 0; i < str.length; i++) {
                     byte_array[i] = str.charCodeAt(i);
                 }
+
                 return byte_array;
             },
 
@@ -75,34 +72,86 @@
                     return '';
                 }
 
-                let result = '';
+                return Array.prototype.map.call(str, function (char) {
+                    let c = char.charCodeAt(0).toString(16);
 
-                for (let i = 0; i < str.length; i++) {
-                    let char = str[i].charCodeAt(0).toString(16);
-
-                    if (char.length > 2) {
-                        result+= '\\u' + char;
-                    } else {
-                        result+= str[i];
+                    if (c.length > 2) {
+                        return '\\u' + c;
                     }
+
+                    return char;
+                }).join('');
+            },
+
+            isIP: function (string) {
+                let pattern = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(:([0-9]{1,5}))?$/;
+                return pattern.test(string);
+            },
+
+            isHex: function (input) {
+                if (typeof input !== 'string') {
+                    return false;
                 }
 
-                return result;
+                const hexPattern = /^[0-9a-fA-F]+$/;
+                return hexPattern.test(input) && input.length % 2 === 0;
+            },
+
+            isInt: function (number) {
+                if (typeof number !== 'number' && typeof number !== 'string') {
+                    return false;
+                }
+
+                return Number.isInteger(Number(number)) && !/^0[0-9a-fA-F]+$/.test(number);
+            },
+
+            isNumeric: function (number) {
+                if (typeof number !== 'number' && typeof number !== 'string') {
+                    return false;
+                }
+
+                return !isNaN(Number(number)) && Number(number) !== Infinity && !/^0[0-9a-fA-F]+$/.test(n);
             },
 
             wrappedEndpoint: function (endpoint) {
-                if (endpoint.substring(0, 7) === 'http://' || endpoint.substring(0, 8) === 'https://' || endpoint.substring(0, 2) === '//') {
+                if (endpoint.startsWith('http://') || endpoint.startsWith('https://') || endpoint.startsWith('//')) {
                     return endpoint;
                 }
 
-                return '//' + endpoint;
+                return this.isIP(endpoint) ? 'http://' + endpoint : '//' + endpoint;
+            },
+
+            string: function (input) {
+                let s;
+
+                if (typeof input === 'object' && input !== null) {
+                    s = JSON.stringify(input);
+                } else {
+                    s = String(input);
+                }
+
+                return this.stringToUnicode(s.replace(/\//g, '\\/'));
             },
 
             shuffle: function (array) {
                 return array.map(v => ({ v, i: Math.random() }))
                     .sort((x, y) => x.i - y.i)
                     .map(({ v }) => v)
-            }
+            },
+
+            merge: function (array1, array2) {
+                let m = array1.concat(array2);
+                return [...new Set(m)];
+            },
+
+            flatMerge: function (arrays) {
+                let m = arrays.flat();
+                return [...new Set(m)];
+            },
+
+            randomSlice: function (array, size) {
+                return this.shuffle(array).slice(0, size);
+            },
         };
     })();
     /* end source */

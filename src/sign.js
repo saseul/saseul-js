@@ -17,10 +17,10 @@
             SIGNATURE_SIZE: 128,
 
             keyPair: function () {
-                var pair = nacl.sign.keyPair();
-                var result = {};
+                let pair = nacl.sign.keyPair();
+                let result = {};
 
-                result.private_key = util.byteToHex(pair.secretKey).substring(0, 64);
+                result.private_key = util.byteToHex(pair.secretKey).slice(0, this.KEY_SIZE);
                 result.public_key = util.byteToHex(pair.publicKey);
                 result.address = this.address(result.public_key);
 
@@ -28,7 +28,7 @@
             },
 
             privateKey: function () {
-                return util.byteToHex(nacl.sign.keyPair().secretKey).substring(0, 64);
+                return util.byteToHex(nacl.sign.keyPair().secretKey).slice(0, this.KEY_SIZE);
             },
 
             publicKey: function (private_key) {
@@ -57,12 +57,11 @@
             },
 
             keyValidity: function (key) {
-                return key.length === this.KEY_SIZE && enc.isHex(key);
+                return typeof key === 'string' && /^[a-fA-F0-9]{64}$/.test(key);
             },
         };
     })();
     /* end source */
 
     return SASEUL.Sign;
-
 }));

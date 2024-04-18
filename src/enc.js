@@ -21,11 +21,7 @@
             ZERO_ADDRESS: '00000000000000000000000000000000000000000000',
 
             string: function (obj) {
-                if (typeof obj !== 'string') {
-                    obj = JSON.stringify(obj);
-                }
-
-                return util.stringToUnicode(obj.replaceAll('/', '\\/'));
+                return util.string(obj);
             },
 
             crypto: function (algo, string) {
@@ -41,7 +37,7 @@
             },
 
             checksum: function (hash) {
-                return this.hash(this.hash(hash)).substring(0, 4);
+                return this.hash(this.hash(hash)).slice(0, 4);
             },
 
             hextime: function (utime) {
@@ -49,13 +45,7 @@
                     utime = util.utime();
                 }
 
-                utime = utime.toString(16);
-
-                if (utime.length > this.HEX_TIME_SIZE) {
-                    return utime.substring(0, this.HEX_TIME_SIZE);
-                }
-
-                return utime.toString(16).padStart(this.HEX_TIME_SIZE, '0');
+                return utime.toString(16).padStart(this.HEX_TIME_SIZE, '0').slice(0, this.HEX_TIME_SIZE);
             },
 
             timeHash: function (obj, utime) {
@@ -67,15 +57,14 @@
             },
 
             idHash: function (obj) {
-                var short_hash = this.shortHash(obj);
+                let short_hash = this.shortHash(obj);
 
                 return short_hash + this.checksum(short_hash);
             },
 
             idHashValidity: function (id_hash) {
-                return this.isHex(id_hash) === true &&
-                    id_hash.length === this.ID_HASH_SIZE &&
-                    this.checksum(id_hash.substring(0, this.SHORT_HASH_SIZE)) === id_hash.substr(-4);
+                return this.isHex(id_hash) && id_hash.length === this.ID_HASH_SIZE &&
+                    this.checksum(id_hash.slice(0, this.SHORT_HASH_SIZE)) === id_hash.slice(-4);
             },
 
             spaceId: function (writer, space) {
@@ -91,10 +80,7 @@
             },
 
             isHex: function (str) {
-                if (typeof str !== 'string') {
-                    return false;
-                }
-                return (Boolean(str.match(/^[0-9a-f]+$/)));
+                return util.isHex(str);
             },
 
             parseCode: function (code) {

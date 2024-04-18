@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SASEUL JS Examples</title>
+</head>
+<body>
+<div id="contents"></div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tweetnacl/1.0.2/nacl.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.5/axios.min.js"></script>
+<script type="text/javascript" src="saseul.min.js"></script>
+<script type="text/javascript">
+    const contents = document.getElementById('contents');
+    const test = {
+        "SASEUL.Util.time()": { result: SASEUL.Util.time() },
+        "SASEUL.Util.utime()": { result: SASEUL.Util.utime() },
+        "SASEUL.Util.randomHexString(num_bytes)": { result: SASEUL.Util.randomHexString(16), input: 16 },
+        "SASEUL.Util.hexToByte(hex)": { result: SASEUL.Util.hexToByte("4d8ba12d63613dda822a69bc5ac1c589"), input: "4d8ba12d63613dda822a69bc5ac1c589" },
+        "SASEUL.Util.byteToHex(byte_array)": { result: SASEUL.Util.byteToHex([77, 139, 161, 45, 99, 97, 61, 218, 130, 42, 105, 188, 90, 193, 197, 137]), input: [77, 139, 161, 45, 99, 97, 61, 218, 130, 42, 105, 188, 90, 193, 197, 137]},
+        "SASEUL.Util.stringToByte(str)": { result: SASEUL.Util.stringToByte("Lorem ipsum"), input: "Lorem ipsum" },
+        "SASEUL.Util.stringToUnicode(str)": { result: SASEUL.Util.stringToUnicode("다람쥐헌쳇바퀴에타고파"), input: "다람쥐헌쳇바퀴에타고파" },
+        "SASEUL.Util.isHex(str)": { result: SASEUL.Util.isHex("62b7341d7271ea3b5ad12011a9467d8ba2736623"), input: "62b7341d7271ea3b5ad12011a9467d8ba2736623"},
+
+        "SASEUL.Enc.string(input)": { result: SASEUL.Enc.string({}), input: {}},
+        "SASEUL.Enc.hash(input)": { result: SASEUL.Enc.hash({}), input: {}},
+        "SASEUL.Enc.shortHash(input)": { result: SASEUL.Enc.shortHash({}), input: {}},
+        "SASEUL.Enc.checksum(hash)": { result: SASEUL.Enc.checksum("62b7341d7271ea3b5ad12011a9467d8ba2736623"), input: "62b7341d7271ea3b5ad12011a9467d8ba2736623"},
+        "SASEUL.Enc.hextime(utime)": { result: SASEUL.Enc.hextime(1681133629023000), input: 1681133629023000},
+        "SASEUL.Enc.timeHash(obj, utime)": { result: SASEUL.Enc.timeHash({}, 1681133629023000), inputs: [{}, 1681133629023000]},
+        "SASEUL.Enc.timeHashValidity(hash)": { result: SASEUL.Enc.timeHashValidity("05f8fb6cc7231844136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"), input: "05f8fb6cc7231844136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"},
+        "SASEUL.Enc.idHash(obj)": { result: SASEUL.Enc.idHash({}), input: {}},
+        "SASEUL.Enc.idHashValidity(hash)": { result: SASEUL.Enc.idHashValidity("62b7341d7271ea3b5ad12011a9467d8ba2736623be3b"), input: "62b7341d7271ea3b5ad12011a9467d8ba2736623be3b"},
+        "SASEUL.Enc.cid(writer, space)": { result: SASEUL.Enc.cid("62b7341d7271ea3b5ad12011a9467d8ba2736623be3b", "Lorem ipsum"), inputs: ["62b7341d7271ea3b5ad12011a9467d8ba2736623be3b", "Lorem ipsum"]},
+        "SASEUL.Enc.txHash(tx)": { result: SASEUL.Enc.txHash({ type: "Send", timestamp: 1681133629023000 }), input: { type: "Send", timestamp: 1681133629023000 }},
+        "SASEUL.Enc.isHex(str)": { result: SASEUL.Enc.isHex("62b7341d7271ea3b5ad12011a9467d8ba2736623"), input: "62b7341d7271ea3b5ad12011a9467d8ba2736623"},
+        "SASEUL.Enc.parseCode(code)": { result: SASEUL.Enc.parseCode({}), input: {}},
+
+        "SASEUL.Sign.keyPair()": { result: SASEUL.Sign.keyPair() },
+        "SASEUL.Sign.privateKey()": { result: SASEUL.Sign.privateKey() },
+        "SASEUL.Sign.publicKey(private_key)": { result: SASEUL.Sign.publicKey("cd654a234b59a64c20781243d161f8b40b9e87d4ea2be1904e66497e22ccefa9"), input: "cd654a234b59a64c20781243d161f8b40b9e87d4ea2be1904e66497e22ccefa9"},
+        "SASEUL.Sign.address(public_key)": { result: SASEUL.Sign.address("107acd459a0522abc4bab6719e30622bd9e08a9a54cd75dd76ce3f5f9dae846d"), input: "107acd459a0522abc4bab6719e30622bd9e08a9a54cd75dd76ce3f5f9dae846d"},
+        "SASEUL.Sign.addressValidity(address)": { result: SASEUL.Sign.addressValidity("4c717ef70937f957bbec120e2750192b9faeb139a48b"), input: "4c717ef70937f957bbec120e2750192b9faeb139a48b"},
+        "SASEUL.Sign.signature(obj, private_key)": { result: SASEUL.Sign.signature({}, "cd654a234b59a64c20781243d161f8b40b9e87d4ea2be1904e66497e22ccefa9"), inputs: [{}, "cd654a234b59a64c20781243d161f8b40b9e87d4ea2be1904e66497e22ccefa9"]},
+        "SASEUL.Sign.signatureValidity(obj, public_key, signature)": {
+            result: SASEUL.Sign.signatureValidity({}, "107acd459a0522abc4bab6719e30622bd9e08a9a54cd75dd76ce3f5f9dae846d", "5bee79b196bf77077f9f5c97c3775ce90dd1676e25bbad21268edcbe2a607c253dad3b367e89f8d3b0605304ab299b88b78e73ed1fb6019bd60c9f2d2cdc4506"),
+            inputs: [{}, "107acd459a0522abc4bab6719e30622bd9e08a9a54cd75dd76ce3f5f9dae846d", "5bee79b196bf77077f9f5c97c3775ce90dd1676e25bbad21268edcbe2a607c253dad3b367e89f8d3b0605304ab299b88b78e73ed1fb6019bd60c9f2d2cdc4506"]},
+        "SASEUL.Sign.keyValidity(key)": { result: SASEUL.Sign.keyValidity("cd654a234b59a64c20781243d161f8b40b9e87d4ea2be1904e66497e22ccefa9"), input: "cd654a234b59a64c20781243d161f8b40b9e87d4ea2be1904e66497e22ccefa9"},
+
+        "SASEUL.Rpc.endpoint(endpoint)": { result: SASEUL.Rpc.endpoint("https://blanc.saseul.net"), input: "https://blanc.saseul.net"},
+        "SASEUL.Rpc.endpoints(endpoints)": { result: SASEUL.Rpc.endpoints(["https://main.saseul.net", "https://sub.saseul.net", "https://blanc.saseul.net"]), input: ["https://main.saseul.net", "https://sub.saseul.net", "https://blanc.saseul.net"]},
+        "SASEUL.Rpc.timeout(milliseconds)": { result: SASEUL.Rpc.timeout(5000), input: 5000},
+        "SASEUL.Rpc.headers(headers)": { result: SASEUL.Rpc.headers({ Origin: "https://example.com" }), input: { Origin: "https://example.com" }},
+        "SASEUL.Rpc.tracker()": { result: SASEUL.Rpc.tracker() },
+        "SASEUL.Rpc.trackerFromAll()": { result: SASEUL.Rpc.trackerFromAll() },
+        "SASEUL.Rpc.peer()": { result: SASEUL.Rpc.peer() },
+        "SASEUL.Rpc.peerFromAll()": { result: SASEUL.Rpc.peerFromAll() },
+        "SASEUL.Rpc.ping()": { result: SASEUL.Rpc.ping() },
+        "SASEUL.Rpc.round()": { result: SASEUL.Rpc.round() },
+        "SASEUL.Rpc.bestRound()": { result: SASEUL.Rpc.bestRound() },
+        "SASEUL.Rpc.signedRequest(item, private_key)": { result: SASEUL.Rpc.signedRequest({ type: "GetBalance", address: "4c717ef70937f957bbec120e2750192b9faeb139a48b" }, SASEUL.Sign.privateKey()), inputs: [{ type: "GetBalance", address: "4c717ef70937f957bbec120e2750192b9faeb139a48b" }, SASEUL.Sign.privateKey()]},
+        "SASEUL.Rpc.simpleRequest(item)": { result: SASEUL.Rpc.simpleRequest({ type: "GetBalance", address: "4c717ef70937f957bbec120e2750192b9faeb139a48b" }), input: { type: "GetBalance", address: "4c717ef70937f957bbec120e2750192b9faeb139a48b" }},
+        "SASEUL.Rpc.signedTransaction(item, private_key)": { result: SASEUL.Rpc.signedTransaction({ type: "Send", to: "4c717ef70937f957bbec120e2750192b9faeb139a48b", amount: "1" }, SASEUL.Sign.privateKey()), inputs: [{ type: "Send", to: "4c717ef70937f957bbec120e2750192b9faeb139a48b", amount: "1" }, SASEUL.Sign.privateKey()]},
+        "SASEUL.Rpc.request(signed_request)": { result: SASEUL.Rpc.request(SASEUL.Rpc.simpleRequest({ type: "GetBalance", address: "4c717ef70937f957bbec120e2750192b9faeb139a48b" })), input: SASEUL.Rpc.simpleRequest({ type: "GetBalance", address: "4c717ef70937f957bbec120e2750192b9faeb139a48b"})},
+        "SASEUL.Rpc.raceRequest(signed_request)": { result: SASEUL.Rpc.raceRequest(SASEUL.Rpc.simpleRequest({ type: "GetBalance", address: "4c717ef70937f957bbec120e2750192b9faeb139a48b" })), input: SASEUL.Rpc.simpleRequest({ type: "GetBalance", address: "4c717ef70937f957bbec120e2750192b9faeb139a48b"})},
+        "SASEUL.Rpc.sendTransaction(signed_transaction)": { result: SASEUL.Rpc.sendTransaction(SASEUL.Rpc.signedTransaction({ type: "Send", to: "4c717ef70937f957bbec120e2750192b9faeb139a48b", amount: "1" }, SASEUL.Sign.privateKey())), input: SASEUL.Rpc.signedTransaction({type: "Send", to: "4c717ef70937f957bbec120e2750192b9faeb139a48b", amount: "1"}, SASEUL.Sign.privateKey())},
+        "SASEUL.Rpc.sendTransactionToAll(signed_transaction)": { result: SASEUL.Rpc.sendTransactionToAll(SASEUL.Rpc.signedTransaction({ type: "Send", to: "4c717ef70937f957bbec120e2750192b9faeb139a48b", amount: "1" }, SASEUL.Sign.privateKey())), input: SASEUL.Rpc.signedTransaction({type: "Send", to: "4c717ef70937f957bbec120e2750192b9faeb139a48b", amount: "1"}, SASEUL.Sign.privateKey())},
+        "SASEUL.Rpc.broadcastTransaction(signed_transaction)": { result: SASEUL.Rpc.broadcastTransaction(SASEUL.Rpc.signedTransaction({ type: "Send", to: "4c717ef70937f957bbec120e2750192b9faeb139a48b", amount: "1" }, SASEUL.Sign.privateKey())), input: SASEUL.Rpc.signedTransaction({type: "Send", to: "4c717ef70937f957bbec120e2750192b9faeb139a48b", amount: "1"}, SASEUL.Sign.privateKey())},
+        "SASEUL.Rpc.estimatedFee(signed_transaction)": { result: SASEUL.Rpc.estimatedFee(SASEUL.Rpc.signedTransaction({ type: "Send", to: "4c717ef70937f957bbec120e2750192b9faeb139a48b", amount: "1" }, SASEUL.Sign.privateKey())), input: SASEUL.Rpc.signedTransaction({type: "Send", to: "4c717ef70937f957bbec120e2750192b9faeb139a48b", amount: "1"}, SASEUL.Sign.privateKey())}
+    };
+
+    for (let i in test) {
+        if (!test[i]) {
+            continue;
+        }
+
+        let id = SASEUL.Util.randomHexString(8);
+        contents.insertAdjacentHTML('beforeend', `<h1>${i}</h1>
+${test[i].input ? `<div>input: (${typeof test[i].input}) ${JSON.stringify(test[i].input, null, 2)}</div>` : ''}
+<div id="${id}"></div>`);
+
+        if (isPromise(test[i].result)) {
+            test[i].result.then(r => setResult (id, r)).catch(e => setResult (id, e));
+        } else {
+            setResult(id, test[i].result);
+        }
+    }
+
+    function setResult(id, value) {
+        document.getElementById(id).innerHTML = `<pre>${JSON.stringify(value, null, 2)}</pre>`;
+    }
+
+    function isPromise(target) {
+        return target instanceof Promise || (target !== null && typeof target === 'object' && typeof target.then === 'function');
+    }
+</script>
+</body>
+</html>

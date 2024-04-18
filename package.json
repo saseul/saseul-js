@@ -1,6 +1,6 @@
 {
   "name": "saseul",
-  "version": "2.7.15",
+  "version": "2.8.0",
   "description": "Javascript API Library for SASEUL blockchain",
   "main": "index.js",
   "keywords": [
@@ -25,6 +25,7 @@
     "axios": "^1.3.5",
     "crypto-js": "^4.1.1",
     "fs": "^0.0.1-security",
+    "node-fetch": "^3.3.2",
     "terser": "^5.16.8",
     "tweetnacl": "^1.0.3"
   },
