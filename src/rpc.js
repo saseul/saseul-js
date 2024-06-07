@@ -246,7 +246,7 @@
                             reject({ code: 408, msg: 'Request timed out' });
                         } else if (error.response && error.response.data && error.response.data.code) {
                             resolve(error.response.data);
-                        } else if (error.response.status && error.response.statusText && error.response.data) {
+                        } else if (error.response && error.response.status && error.response.statusText && error.response.data) {
                             reject({ code: error.response.status, msg: error.response.statusText, data: error.response.data });
                         } else {
                             reject(error);

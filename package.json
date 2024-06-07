@@ -1,6 +1,6 @@
 {
   "name": "saseul",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "description": "Javascript API Library for SASEUL blockchain",
   "main": "index.js",
   "keywords": [
