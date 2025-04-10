@@ -372,7 +372,7 @@
 
             _all: function (endpoints, method, path, data, condition = () => true, success = () => {}) {
                 if (!Array.isArray(endpoints) || endpoints.length === 0) {
-                    fallback();
+                    throw new Error('No endpoints provided');
                 }
 
                 try {

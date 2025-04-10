@@ -114,11 +114,21 @@
             },
 
             wrappedEndpoint: function (endpoint) {
-                if (endpoint.startsWith('http://') || endpoint.startsWith('https://') || endpoint.startsWith('//')) {
-                    return endpoint;
-                }
+                let is_browser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
-                return this.isIP(endpoint) ? 'http://' + endpoint : '//' + endpoint;
+                if (is_browser) {
+                    if (endpoint.startsWith('http://') || endpoint.startsWith('https://') || endpoint.startsWith('//')) {
+                        return endpoint;
+                    }
+
+                    return this.isIP(endpoint) ? 'http://' + endpoint : '//' + endpoint;
+                } else {
+                    if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+                        return endpoint;
+                    }
+
+                    return 'http://' + endpoint;
+                }
             },
 
             string: function (input) {
